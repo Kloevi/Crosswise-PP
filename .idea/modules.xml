@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/Programmierpraktikum.iml" filepath="$PROJECT_DIR$/.idea/Programmierpraktikum.iml" />
+      <module fileurl="file://$PROJECT_DIR$/pp_crosswise_kloevekorn/pp_crosswise_kloevekorn.iml" filepath="$PROJECT_DIR$/pp_crosswise_kloevekorn/pp_crosswise_kloevekorn.iml" />
+    </modules>
+  </component>
+</project>
