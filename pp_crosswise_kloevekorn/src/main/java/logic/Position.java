@@ -10,6 +10,10 @@ public class Position {
 
 
 
+    private Integer valueDiff;
+
+
+
     public Position(int xCoordinate, int yCoordinate) {
         this.xCoordinate = xCoordinate;
         this.yCoordinate = yCoordinate;
@@ -20,6 +24,13 @@ public class Position {
         this.token = token;
     }
 
+    public Integer getValueDiff() {
+        return valueDiff;
+    }
+
+    public void setValueDiff(Integer valueDiff) {
+        this.valueDiff = valueDiff;
+    }
     public void setToken(Token token) {
         this.token = token;
     }

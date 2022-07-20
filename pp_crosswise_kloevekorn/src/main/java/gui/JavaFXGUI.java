@@ -13,19 +13,17 @@ public class JavaFXGUI implements GUIConnector {
 
 
 
-
-
-
     public JavaFXGUI(GridPane gameFieldGrid
     ) {
         this.gameFieldGrid = gameFieldGrid;
 
         this.gridImages = new ImageView[Constants.GAMEGRID_ROWS][Constants.GAMEGRID_COLUMNS];
-
-        generateGrid();
     }
 
 
+
+
+    /*
 
     public void generateGrid() {
         this.gameFieldGrid.getChildren().clear();
@@ -49,5 +47,5 @@ public class JavaFXGUI implements GUIConnector {
 
     }
 
-
+    */
 }

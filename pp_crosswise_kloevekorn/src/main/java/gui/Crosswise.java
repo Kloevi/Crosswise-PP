@@ -5,7 +5,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-import java.awt.*;
 import java.io.IOException;
 
 /**
@@ -26,9 +25,12 @@ public class Crosswise extends Application {
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(Crosswise.class.getResource("UserInterface.fxml"));
 
-        Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
-        Integer v = d.width;
-        Integer v1 = d.height;
+        UserInterfaceController controller = new UserInterfaceController();
+        controller.initialize(null, null);
+
+
+        Integer v = 1280;
+        Integer v1 = 1024;
 
         Scene scene = new Scene(fxmlLoader.load(), v, v1);
         stage.setTitle("Hello!");

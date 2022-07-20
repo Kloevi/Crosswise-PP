@@ -4,8 +4,11 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
+import logic.Constants;
 import logic.GUIConnector;
+import logic.Game;
 import logic.GameLogic;
+import logic.Player;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -44,7 +47,7 @@ public class UserInterfaceController implements Initializable {
         this.guiConnector = new JavaFXGUI(this.gameFieldGrid);
 
 
-        this.gameLogic = new GameLogic(this.guiConnector);
+        //this.gameLogic = new GameLogic(this.guiConnector);
 
     }
 
@@ -58,6 +61,19 @@ public class UserInterfaceController implements Initializable {
     @FXML
     protected void onHelloButtonClick() {
         welcomeText.setText("Welcome to JavaFX Application!");
+    }
+
+    @FXML
+    protected void clickNewGameButton() {
+        //TODO extra Fenster mit Werten
+        Player[] players = new Player[Constants.PLAYER_NUMBER];
+        players[0] = new Player("Tom", true, false);
+        players[1] = new Player("Jacob", true, false);
+        players[2] = new Player("Jonas", true, false);
+        players[3]= new Player("Simon", true, false);
+
+        Game game = new Game(players);
+
     }
 
 

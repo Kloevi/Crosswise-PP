@@ -32,6 +32,17 @@ public class PubLogicTest {
 
     }
 
+    @Test
+    public void generateGameLogic() {
+        GameLogic logic = new GameLogic();
+        System.out.println(logic.getDrawPile());
+        System.err.println("----");
+        System.out.println(logic.getHand());
+
+
+
+    }
+
 
 
     @Test
@@ -50,37 +61,29 @@ public class PubLogicTest {
         int[][] list = new int[][] {{3,3,2,1,5,2},{0,4,5,0,2,5},{3,1,1,4,5,6},{6,2,0,0,6,6},{5,5,5,3,6,0},{1,6,1,3,1,2}};
         boolean verticalTeamWin = false;
         boolean horizontalTeamWin = false;
+        boolean fromVerticalSide = true;
         Token[] hand = new Token[] {Token.Star, Token.Triangle, Token.Star, Token.Star};
+
+
 
 
         Map<Integer, Map<Integer, Integer>> newOccurrenceMap = getOccurrenceMap(list);
 
         Map<Integer, Integer> pointsMap = calculatePoints(newOccurrenceMap);
+
         System.out.println("---------");
+
         Set<Position> posSet = emptyFields(list);
 
-        Map<Token, Position> bestPositions = new HashMap<>();
-
-        for (Token token:hand) {
-            if (token.getValue() != 0) {
-                for (Position pos : posSet) {
-                    int changeHorizontal = calculateChangeOfSingleLine(newOccurrenceMap.get(pos.getYCoordinate() + 1), token.getValue());
-                    int changeVertical = calculateChangeOfSingleLine(newOccurrenceMap.get(-pos.getXCoordinate() - 1), token.getValue());
-                    if (changeHorizontal == -1) {
-                        horizontalTeamWin = true;
-                    } else if(changeVertical == -1) {
-                        verticalTeamWin = true;
-                    } else {
-                        int change = changeVertical - changeHorizontal;
-                    }
-                    if (bestPositions.get(token) == null ||bestPositions.get());//TODO
-                    bestPositions.put()
-                }
-            }
-        }
 
 
 
+        Map<Integer , Map<Token, Position>> bestPositions = new HashMap<>();
+
+
+
+
+        System.out.println(bestPositions);
 
     }
 

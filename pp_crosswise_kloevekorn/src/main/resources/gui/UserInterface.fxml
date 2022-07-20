@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.CheckMenuItem?>
 <?import javafx.scene.control.Label?>
@@ -32,7 +31,7 @@
               <menus>
                 <Menu mnemonicParsing="false" text="Crosswise">
                   <items>
-                    <MenuItem mnemonicParsing="false" text="Neues Spiel" />
+                    <MenuItem fx:id="newGameButton" mnemonicParsing="false" onAction="#clickNewGameButton" text="Neues Spiel" />
                         <MenuItem mnemonicParsing="false" text="Beenden" />
                   </items>
                 </Menu>
