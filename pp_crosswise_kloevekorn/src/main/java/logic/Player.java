@@ -7,7 +7,7 @@ public class Player {
 
     private boolean isAI;
 
-    private int[] hand = new int[4];
+    private Token[] hand = new Token[4];
 
     /**
      * Konstruktor für Default Player
