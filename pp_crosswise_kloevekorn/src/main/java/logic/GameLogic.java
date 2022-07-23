@@ -41,15 +41,17 @@ public class GameLogic {
 
     public static Map<Token, Integer> generateDrawPile() {
         Token a = Token.Sun;
+        Map<Token, Integer> drawPile = new HashMap<>();
         int counter = 1;
         for (int i = 1; i < Constants.UNIQUE_SYMBOL_TOKENS;i++) {
-            this.drawPile.put(a.getTokenFromValue(i), Constants.GAMEGRID_ROWS + 1);
+            drawPile.put(a.getTokenFromValue(i), Constants.GAMEGRID_ROWS + 1);
             counter++;
         }
         System.out.println(counter);
         for (int j = counter; j <= Constants.UNIQUE_ACTION_TOKENS + counter; j++) {
-            this.drawPile.put(a.getTokenFromValue(j), Constants.AMOUNT_ACTION_TOKENS);
+            drawPile.put(a.getTokenFromValue(j), Constants.AMOUNT_ACTION_TOKENS);
         }
+        return drawPile;
     }
 
     public Token drawFromDrawPile() {

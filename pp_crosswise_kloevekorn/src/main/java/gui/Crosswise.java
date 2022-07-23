@@ -25,8 +25,8 @@ public class Crosswise extends Application {
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(Crosswise.class.getResource("UserInterface.fxml"));
 
-        UserInterfaceController controller = new UserInterfaceController();
-        controller.initialize(null, null);
+        //UserInterfaceController controller = new UserInterfaceController();
+        //controller.initialize(null, null);
 
 
         Integer v = 1280;

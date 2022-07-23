@@ -2,6 +2,7 @@ package logic;
 
 import gui.JavaFXGUI;
 import javafx.scene.layout.GridPane;
+import logic.ErrorHandling.CrosswiseExceptionHandler;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -19,7 +20,7 @@ public class PubLogicTest {
         GridPane a = new GridPane();
         JavaFXGUI w = new JavaFXGUI(a);
 
-        w.generateGrid();
+
     }
 
     @Test
@@ -38,9 +39,83 @@ public class PubLogicTest {
         System.out.println(logic.getDrawPile());
         System.err.println("----");
         System.out.println(logic.getHand());
+    }
 
+    @Test
+    public void generateGameTest() throws CrosswiseExceptionHandler {
 
+        Player[] players = new Player[Constants.PLAYER_NUMBER];
+        players[0] = new Player("Tom", true, false, true);
+        players[1] = new Player("Jacob", true, false, false);
+        players[2] = new Player("Jonas", true, false, true);
+        players[3]= new Player("Simon", true, false, false);
+        Game game = new Game(players);
 
+        int[][] listaaaa = new int[][] {{3,3,2,1,5,2},{0,4,5,0,2,5},{3,1,1,4,5,6},{6,2,0,0,6,6},{5,5,5,3,6,0},{1,6,1,3,1,2}};
+        Token[][] list = intToTokenMatrix(listaaaa);
+        GameBoard newBoard = new GameBoard(list);
+        game.setGameBoard(newBoard);
+        printGrid(game);
+
+        Map<Integer, Map<Token, Integer>> testoccurrenceMap = game.getOccurrencesOfTokensWithChangedToken(game.getGameBoard().getGameGrid());
+
+        Position pos = new Position(1, 0);
+
+        Map<Integer, Integer> pointsMap = game.calculateCurrentOverallPointsWithChangedToken(pos, Token.None);
+
+        /*
+        Position pos2 = new Position(2, 3);
+        Calculation calc = game.calculateChangeWithMove(players[0], pos2, Token.Star);
+        System.out.println(calc.getPointsChange());
+        */
+
+        /*
+        Set<TokenMove> tokenMoves = game.createPossibleSymbolTokenMoves(Token.Sun, players[0]);
+        for (TokenMove tokenMove : tokenMoves) {
+            System.out.println("----");
+            System.out.println(tokenMove.getPrimaryMovePosition().getXCoordinate() + "/" +
+                    tokenMove.getPrimaryMovePosition().getYCoordinate());
+            System.out.println(tokenMove.getRelativeChange());
+            System.out.println(tokenMove.getToken());
+        }
+        */
+
+        players[0].setHand(new Token[] {Token.Pentagon, Token.Pentagon, Token.Star, Token.Star});
+        TokenMove bestMove = game.calculateAIMove(players[0]);
+        System.out.println(bestMove.getToken());
+        System.out.println(bestMove.getPrimaryMovePosition().getXCoordinate());
+        System.out.println(bestMove.getPrimaryMovePosition().getYCoordinate());
+        System.out.println(bestMove.getRelativeChange());
+
+        /*
+        TokenMove pentagon = new TokenMove(new Position(3, 1), 1, Token.Pentagon,
+                false, false);
+        TokenMove star = new TokenMove(new Position(2, 3), 1, Token.Star,
+                false, false);
+
+        System.out.println(game.isBetterMove(pentagon, star, players[0]));
+        */
+
+    }
+    public Token[][] intToTokenMatrix(int[][] grid) {
+        Token[][] intMatrix = new Token[Constants.GAMEGRID_ROWS][Constants.GAMEGRID_COLUMNS];
+        for (int i = 0; i < grid.length; i++) {
+            for (int j = 0; j < grid[0].length; j++) {
+                intMatrix[i][j] = Token.getTokenFromValue(grid[i][j]);
+            }
+        }
+        return intMatrix;
+    }
+
+    public static void printGrid(Game game) {
+        GameBoard gameBoard = game.getGameBoard();
+        Token[][] grid = gameBoard.getGameGrid();
+        for (int i = 0; i < grid.length; i++) {
+            for (int j = 0; j < grid[0].length; j++) {
+                System.out.print(grid[i][j].getValue() + " ");
+            }
+            System.out.println();
+        }
     }
 
 
@@ -71,9 +146,11 @@ public class PubLogicTest {
 
         Map<Integer, Integer> pointsMap = calculatePoints(newOccurrenceMap);
 
+
         System.out.println("---------");
 
         Set<Position> posSet = emptyFields(list);
+
 
 
 

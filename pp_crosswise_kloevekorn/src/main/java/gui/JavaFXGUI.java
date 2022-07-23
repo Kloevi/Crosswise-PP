@@ -1,5 +1,6 @@
 package gui;
 
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import logic.Constants;
@@ -12,18 +13,17 @@ public class JavaFXGUI implements GUIConnector {
     private final ImageView[][] gridImages;
 
 
-
-    public JavaFXGUI(GridPane gameFieldGrid
-    ) {
+    public JavaFXGUI(GridPane gameFieldGrid) {
         this.gameFieldGrid = gameFieldGrid;
-
         this.gridImages = new ImageView[Constants.GAMEGRID_ROWS][Constants.GAMEGRID_COLUMNS];
+
+        generateGrid();
     }
 
 
 
 
-    /*
+
 
     public void generateGrid() {
         this.gameFieldGrid.getChildren().clear();
@@ -39,6 +39,9 @@ public class JavaFXGUI implements GUIConnector {
 
                 System.out.println(imgNew.getId());
 
+                Image img = new Image("\\pictures\\1 - sun.png");
+                imgNew.setImage(img);
+
                 this.gridImages[r][c] = imgNew;
                 this.gameFieldGrid.add(imgNew, c, r);
             }
@@ -47,5 +50,5 @@ public class JavaFXGUI implements GUIConnector {
 
     }
 
-    */
+
 }
