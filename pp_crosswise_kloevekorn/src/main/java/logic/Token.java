@@ -59,12 +59,12 @@ public enum Token {
         return switch (token) {
             //case None -> "src/main/resources/pictures/1 - sun.png";
             case None -> "\\pictures\\1 - sun.png";
-            case Sun -> "\\pictures\\2 - cross.png";
-            case Cross -> "\\pictures\\3 - triangle.png";
-            case Triangle -> "\\pictures\\4 - square.png";
-            case Square -> "\\pictures\\5 - pentagon.png";
-            case Pentagon -> "\\pictures\\1 - sun.png";
-            case Star -> "\\pictures\\1 - sun.png";
+            case Sun -> "\\pictures\\1 - sun.png";
+            case Cross -> "\\pictures\\2 - cross.png";
+            case Triangle -> "\\pictures\\3 - triangle.png";
+            case Square -> "\\pictures\\4 - square.png";
+            case Pentagon -> "\\pictures\\5 - pentagon.png";
+            case Star -> "\\pictures\\6 - star.png";
             case Remover -> "\\pictures\\1 - sun.png";
             case Mover -> "\\pictures\\1 - sun.png";
             case Swapper -> "\\pictures\\1 - sun.png";

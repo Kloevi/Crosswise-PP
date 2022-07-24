@@ -7,7 +7,6 @@
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.RadioMenuItem?>
-<?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
@@ -35,13 +34,13 @@
                         <MenuItem mnemonicParsing="false" text="Beenden" />
                   </items>
                 </Menu>
-                <Menu mnemonicParsing="false" text="Punkte">
+                <Menu fx:id="menuPunkte" mnemonicParsing="false" text="Punkte">
                   <items>
                         <CheckMenuItem mnemonicParsing="false" text="Punkte pro Team anzeigen" />
                         <CheckMenuItem mnemonicParsing="false" text="Punkte pro Zeile/Spalte anzeigen" />
                   </items>
                 </Menu>
-                  <Menu mnemonicParsing="false" text="Computer">
+                  <Menu fx:id="menuComputer" mnemonicParsing="false" text="Computer">
                      <items>
                         <CheckMenuItem mnemonicParsing="false" text="Computer Hand anzeigen" />
                         <Menu mnemonicParsing="false" text="Animations Geschwindigkeit">
@@ -84,7 +83,7 @@
                                     <Font size="17.0" />
                                  </font>
                               </Label>
-                              <Label alignment="CENTER" prefHeight="32.0" prefWidth="35.0" text="1">
+                              <Label fx:id="currentPlayerLabel" alignment="CENTER" prefHeight="32.0" prefWidth="35.0" text="Tom">
                                  <font>
                                     <Font size="17.0" />
                                  </font>
@@ -152,30 +151,6 @@
                           </rowConstraints>
                         </GridPane>
                      </center>
-                     <top>
-                        <GridPane fx:id="player1Hand" prefHeight="40.0" BorderPane.alignment="CENTER">
-                          <columnConstraints>
-                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                          </columnConstraints>
-                          <rowConstraints>
-                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                          </rowConstraints>
-                           <children>
-                              <ImageView fx:id="player1HandToken1" fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
-                                 <image>
-                                    <Image url="@../pictures/1%20-%20sun.png" />
-                                 </image></ImageView>
-                              <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
-                           </children>
-                        </GridPane>
-                     </top>
                      <left>
                         <GridPane prefHeight="257.0" prefWidth="40.0" BorderPane.alignment="CENTER">
                           <columnConstraints>
@@ -229,6 +204,16 @@
                      <padding>
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                      </padding>
+                     <top>
+                        <GridPane fx:id="handPlayer1" BorderPane.alignment="CENTER">
+                          <columnConstraints>
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                          </columnConstraints>
+                          <rowConstraints>
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                          </rowConstraints>
+                        </GridPane>
+                     </top>
                   </BorderPane>
                </children>
                <opaqueInsets>

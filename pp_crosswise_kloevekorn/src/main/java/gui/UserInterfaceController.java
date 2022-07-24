@@ -3,13 +3,13 @@ package gui;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
+import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import logic.Constants;
 import logic.GUIConnector;
 import logic.Game;
-import logic.GameLogic;
 import logic.Player;
 import logic.Token;
 
@@ -24,18 +24,36 @@ import java.util.ResourceBundle;
  */
 public class UserInterfaceController implements Initializable {
 
-    /**
-     * Label that displays the welcome text. Should be deleted when creating an
-     * actual project.
-     */
-    @FXML
-    private Label welcomeText;
 
     @FXML
     private GridPane gameFieldGrid;
 
+    @FXML
+    private GridPane handPlayer1;
 
-    private GameLogic gameLogic;
+    @FXML
+    private GridPane handPlayer2;
+
+    @FXML
+    private GridPane handPlayer3;
+
+    @FXML
+    private GridPane handPlayer4;
+
+    @FXML
+    private Label currentPlayerLabel;
+
+    @FXML
+    private GridPane usedActionTokensGrid;
+
+    @FXML
+    private MenuItem menuPunkte;
+
+    @FXML
+    private MenuItem menuComputer;
+
+
+
 
     private GUIConnector guiConnector;
 
@@ -53,7 +71,15 @@ public class UserInterfaceController implements Initializable {
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        this.guiConnector = new JavaFXGUI(this.gameFieldGrid);
+        this.guiConnector = new JavaFXGUI(this.gameFieldGrid,
+                handPlayer1,
+                handPlayer2,
+                handPlayer3,
+                handPlayer4,
+                currentPlayerLabel,
+                usedActionTokensGrid,
+                menuPunkte,
+                menuComputer);
 
 
         //this.gameLogic = new GameLogic(this.guiConnector);
@@ -61,27 +87,17 @@ public class UserInterfaceController implements Initializable {
     }
 
 
-
-    /**
-     * Called when the button on the gui is clicked. Triggers display of welcome
-     * text in the label. <br> Should be deleted when creating an actual
-     * project.
-     */
-    @FXML
-    protected void onHelloButtonClick() {
-        welcomeText.setText("Welcome to JavaFX Application!");
-    }
-
     @FXML
     protected void clickNewGameButton() {
         //TODO extra Fenster mit Werten
         Player[] players = new Player[Constants.PLAYER_NUMBER];
-        players[0] = new Player("Tom", true, false, true);
-        players[1] = new Player("Jacob", true, false, false);
-        players[2] = new Player("Jonas", true, false, true);
-        players[3]= new Player("Simon", true, false, false);
+        players[0] = new Player(0, "Tom", true, false, true);
+        players[1] = new Player(1,"Jacob", true, false, false);
+        players[2] = new Player(2,"Jonas", true, false, true);
+        players[3]= new Player(3,"Simon", true, false, false);
 
-        Game game = new Game(players);
+        Game game = new Game(players /*TODO guiConnector*/);
+        game.setUpNewGame();
 
         System.out.println(Arrays.toString(players[0].getHand()));
         Image image = new Image(Token.getImagePathFromToken(players[0].getHand()[0]));

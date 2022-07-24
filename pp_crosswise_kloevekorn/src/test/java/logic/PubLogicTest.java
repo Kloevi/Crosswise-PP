@@ -1,7 +1,5 @@
 package logic;
 
-import gui.JavaFXGUI;
-import javafx.scene.layout.GridPane;
 import logic.ErrorHandling.CrosswiseExceptionHandler;
 import org.junit.Test;
 
@@ -12,16 +10,6 @@ import java.util.Map;
 import java.util.Set;
 
 public class PubLogicTest {
-
-
-
-    @Test
-    public void gridTest() {
-        GridPane a = new GridPane();
-        JavaFXGUI w = new JavaFXGUI(a);
-
-
-    }
 
     @Test
     public void sandbox() {
@@ -45,10 +33,11 @@ public class PubLogicTest {
     public void generateGameTest() throws CrosswiseExceptionHandler {
 
         Player[] players = new Player[Constants.PLAYER_NUMBER];
-        players[0] = new Player("Tom", true, false, true);
-        players[1] = new Player("Jacob", true, false, false);
-        players[2] = new Player("Jonas", true, false, true);
-        players[3]= new Player("Simon", true, false, false);
+        players[0] = new Player(0 ,"Tom", true, false, true);
+        players[1] = new Player(1, "Jacob", true, false, false);
+        players[2] = new Player(2, "Jonas", true, false, true);
+        players[3]= new Player(3, "Simon", true, false, false);
+
         Game game = new Game(players);
 
         int[][] listaaaa = new int[][] {{3,3,2,1,5,2},{0,4,5,0,2,5},{3,1,1,4,5,6},{6,2,0,0,6,6},{5,5,5,3,6,0},{1,6,1,3,1,2}};
@@ -56,13 +45,14 @@ public class PubLogicTest {
         GameBoard newBoard = new GameBoard(list);
         game.setGameBoard(newBoard);
         printGrid(game);
-        Map<Integer, Map<Token, Integer>> testoccurrenceMap =
-                game.getOccurrencesOfTokensWithChangedToken(game.getGameBoard().getGameGrid());
+
+
+        //Map<Integer, Map<Token, Integer>> testoccurrenceMap =
+        //        game.getOccurrencesOfTokensWithChangedToken(game.getGameBoard().getGameGrid());
 
         Position pos = new Position(0, 1);
-        Map<Integer, Integer> pointsMap = game.calculateCurrentOverallPointsWithChangedToken(pos,
-                Token.None, game.getGridCopyWithAddedToken(pos, Token.None));
-        System.out.println(pointsMap);
+        //Map<Integer, Integer> pointsMap = game.calculateCurrentOverallPointsWithChangedToken(game.getGridCopyWithAddedToken(pos, Token.None));
+        //System.out.println(pointsMap);
         System.out.println("---");
 
 
@@ -72,7 +62,7 @@ public class PubLogicTest {
         System.out.println(calc.getPointsChange());
         */
 
-        /*
+
         Set<TokenMove> tokenMoves = game.createPossibleSymbolTokenMoves(Token.Sun, players[0]);
         for (TokenMove tokenMove : tokenMoves) {
             System.out.println("----");
@@ -81,9 +71,9 @@ public class PubLogicTest {
             System.out.println(tokenMove.getRelativeChange());
             System.out.println(tokenMove.getToken());
         }
-        */
 
 
+        /*
         Set<TokenMove> tokenMoves = game.createPossibleRemoverTokenMoves(players[0]);
         for (TokenMove tokenMove : tokenMoves) {
             System.out.println("----");
@@ -92,7 +82,7 @@ public class PubLogicTest {
             System.out.println(tokenMove.getRelativeChange());
             System.out.println(tokenMove.getToken());
         }
-
+        */
         /*
         Set<TokenMove> tokenMoves = game.createPossibleMoverTokenMoves(players[0]);
         for (TokenMove tokenMove : tokenMoves) {
@@ -106,13 +96,46 @@ public class PubLogicTest {
         }
         */
         /*
-        players[0].setHand(new Token[] {Token.Pentagon, Token.Remover, Token.Star, Token.Square});
-        TokenMove bestMove = game.calculateAIMove(players[0]);
-        System.out.println(bestMove.getToken());
-        System.out.println(bestMove.getPrimaryMovePosition().getXCoordinate());
-        System.out.println(bestMove.getPrimaryMovePosition().getYCoordinate());
-        System.out.println(bestMove.getRelativeChange());
+        Set<TokenMove> tokenMoves = game.createPossibleSwapperTokenMoves(players[0]);
+        for (TokenMove tokenMove : tokenMoves) {
+            System.out.println("----");
+            System.out.println(tokenMove.getSecondaryMovePosition().getXCoordinate() + "/" +
+                    tokenMove.getSecondaryMovePosition().getYCoordinate());
+            System.out.println(tokenMove.getPrimaryMovePosition().getXCoordinate() + "/" +
+                    tokenMove.getPrimaryMovePosition().getYCoordinate());
+            System.out.println(tokenMove.getRelativeChange());
+            System.out.println(tokenMove.getToken());
+        }
         */
+        /*
+        Set<TokenMove> tokenMoves = game.createPossibleReplacerTokenMoves(players[0]);
+        for (TokenMove tokenMove : tokenMoves) {
+            System.out.println("----");
+            System.out.println(tokenMove.getSecondaryMovePosition().getHandPosition());
+            System.out.println(tokenMove.getPrimaryMovePosition().getXCoordinate() + "/" +
+                    tokenMove.getPrimaryMovePosition().getYCoordinate());
+            System.out.println(tokenMove.getRelativeChange());
+            System.out.println(tokenMove.getToken());
+        }
+        */
+
+
+        /*
+        players[0].setHand(new Token[] {Token.Replacer, Token.Pentagon, Token.Square, Token.Square});
+        TokenMove tokenMove = game.calculateAIMove(players[0]);
+        System.out.println(tokenMove.getToken());
+        System.out.println(tokenMove.getSecondaryMovePosition().getXCoordinate() + "/" +
+                tokenMove.getSecondaryMovePosition().getYCoordinate());
+
+        System.out.println(tokenMove.getSecondaryMovePosition().getHandPosition() + 1);
+
+        System.out.println(tokenMove.getPrimaryMovePosition().getXCoordinate() + "/" +
+                tokenMove.getPrimaryMovePosition().getYCoordinate());
+        System.out.println(tokenMove.getRelativeChange());
+        */
+
+        System.out.println(game.getOccurrencesOfTokens());
+
         /*
         TokenMove pentagon = new TokenMove(new Position(3, 1), 1, Token.Pentagon,
                 false, false);
@@ -121,7 +144,6 @@ public class PubLogicTest {
 
         System.out.println(game.isBetterMove(pentagon, star, players[0]));
         */
-
     }
     public Token[][] intToTokenMatrix(int[][] grid) {
         Token[][] intMatrix = new Token[Constants.GAMEGRID_ROWS][Constants.GAMEGRID_COLUMNS];
