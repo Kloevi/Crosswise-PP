@@ -56,16 +56,19 @@ public class PubLogicTest {
         GameBoard newBoard = new GameBoard(list);
         game.setGameBoard(newBoard);
         printGrid(game);
+        Map<Integer, Map<Token, Integer>> testoccurrenceMap =
+                game.getOccurrencesOfTokensWithChangedToken(game.getGameBoard().getGameGrid());
 
-        Map<Integer, Map<Token, Integer>> testoccurrenceMap = game.getOccurrencesOfTokensWithChangedToken(game.getGameBoard().getGameGrid());
+        Position pos = new Position(0, 1);
+        Map<Integer, Integer> pointsMap = game.calculateCurrentOverallPointsWithChangedToken(pos,
+                Token.None, game.getGridCopyWithAddedToken(pos, Token.None));
+        System.out.println(pointsMap);
+        System.out.println("---");
 
-        Position pos = new Position(1, 0);
-
-        Map<Integer, Integer> pointsMap = game.calculateCurrentOverallPointsWithChangedToken(pos, Token.None);
 
         /*
-        Position pos2 = new Position(2, 3);
-        Calculation calc = game.calculateChangeWithMove(players[0], pos2, Token.Star);
+        Position pos2 = new Position(0, 3);
+        Calculation calc = game.calculateChangeWithMove(players[0], pos2, Token.None);
         System.out.println(calc.getPointsChange());
         */
 
@@ -80,13 +83,36 @@ public class PubLogicTest {
         }
         */
 
-        players[0].setHand(new Token[] {Token.Pentagon, Token.Pentagon, Token.Star, Token.Star});
+
+        Set<TokenMove> tokenMoves = game.createPossibleRemoverTokenMoves(players[0]);
+        for (TokenMove tokenMove : tokenMoves) {
+            System.out.println("----");
+            System.out.println(tokenMove.getPrimaryMovePosition().getXCoordinate() + "/" +
+                    tokenMove.getPrimaryMovePosition().getYCoordinate());
+            System.out.println(tokenMove.getRelativeChange());
+            System.out.println(tokenMove.getToken());
+        }
+
+        /*
+        Set<TokenMove> tokenMoves = game.createPossibleMoverTokenMoves(players[0]);
+        for (TokenMove tokenMove : tokenMoves) {
+            System.out.println("----");
+            System.out.println(tokenMove.getSecondaryMovePosition().getXCoordinate() + "/" +
+                    tokenMove.getSecondaryMovePosition().getYCoordinate());
+            System.out.println(tokenMove.getPrimaryMovePosition().getXCoordinate() + "/" +
+                    tokenMove.getPrimaryMovePosition().getYCoordinate());
+            System.out.println(tokenMove.getRelativeChange());
+            System.out.println(tokenMove.getToken());
+        }
+        */
+        /*
+        players[0].setHand(new Token[] {Token.Pentagon, Token.Remover, Token.Star, Token.Square});
         TokenMove bestMove = game.calculateAIMove(players[0]);
         System.out.println(bestMove.getToken());
         System.out.println(bestMove.getPrimaryMovePosition().getXCoordinate());
         System.out.println(bestMove.getPrimaryMovePosition().getYCoordinate());
         System.out.println(bestMove.getRelativeChange());
-
+        */
         /*
         TokenMove pentagon = new TokenMove(new Position(3, 1), 1, Token.Pentagon,
                 false, false);
@@ -140,8 +166,6 @@ public class PubLogicTest {
         Token[] hand = new Token[] {Token.Star, Token.Triangle, Token.Star, Token.Star};
 
 
-
-
         Map<Integer, Map<Integer, Integer>> newOccurrenceMap = getOccurrenceMap(list);
 
         Map<Integer, Integer> pointsMap = calculatePoints(newOccurrenceMap);
@@ -152,13 +176,7 @@ public class PubLogicTest {
         Set<Position> posSet = emptyFields(list);
 
 
-
-
-
         Map<Integer , Map<Token, Position>> bestPositions = new HashMap<>();
-
-
-
 
         System.out.println(bestPositions);
 

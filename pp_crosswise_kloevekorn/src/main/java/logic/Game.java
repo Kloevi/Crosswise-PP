@@ -312,7 +312,7 @@ public class Game {
         return switch (token.getValue()) {
             case 1, 2, 3, 4, 5, 6 -> createPossibleSymbolTokenMoves(token, player);
             case 7 -> createPossibleRemoverTokenMoves(player);
-            case 8 -> createPossibleMoverTokenMoves();
+            case 8 -> createPossibleMoverTokenMoves(player);
             case 9 -> createPossibleSwapperTokenMoves();
             case 10 -> createPossibleReplacerTokenMoves();
             default -> null;
@@ -326,7 +326,7 @@ public class Game {
         Set<TokenMove> tokenMoves = new HashSet<>();
         Set<Position> emptyFields = emptyFields();
         for (Position position : emptyFields) {
-            Calculation currentCalculation = calculateChangeWithMove(player, position, token);
+            Calculation currentCalculation = calculateChangeWithMove(player, position, token, getGridCopyWithAddedToken(position, token));
             //TODO Prevent Loss
             tokenMoves.add(new TokenMove(position, currentCalculation.getPointsChange(), token, currentCalculation.isGameWinning(), isMovePreventingLoss()));
         }
@@ -350,8 +350,8 @@ public class Game {
      * Berechnet Punkte Veränderung insgesamt
      * @return Punkte Differenz auf das ganze Feld bezogen
      */
-    public Calculation calculateChangeWithMove(Player player, Position position, Token token) {
-        Map<Integer, Integer> pointsMap = calculateCurrentOverallPointsWithChangedToken(position, token);
+    public Calculation calculateChangeWithMove(Player player, Position position, Token token, Token[][] newGrid) {
+        Map<Integer, Integer> pointsMap = calculateCurrentOverallPointsWithChangedToken(position, token, newGrid);
         int curr = 0;
         boolean isWinning = false;
         boolean isCreatingLoss = false;
@@ -388,8 +388,9 @@ public class Game {
      *
      * @return Map (Linie, Punkte)
      */
-    public Map<Integer, Integer> calculateCurrentOverallPointsWithChangedToken(Position position, Token token) {
-        Map<Integer, Map<Token, Integer>> occurrenceMap = getOccurrencesOfTokensWithChangedToken(getGridCopyWithAddedToken(position, token));
+    public Map<Integer, Integer> calculateCurrentOverallPointsWithChangedToken(Position position, Token token, Token [][] newGrid) {
+        Map<Integer, Map<Token, Integer>> occurrenceMap = getOccurrencesOfTokensWithChangedToken(newGrid);
+
         Map<Integer, Integer> PointMap = new HashMap<>();
 
         for (Map.Entry<Integer, Map<Token, Integer>> entry : occurrenceMap.entrySet()) {
@@ -398,7 +399,7 @@ public class Game {
         return PointMap;
     }
 
-    private Token[][] getGridCopyWithAddedToken(Position position, Token token) {
+    public Token[][] getGridCopyWithAddedToken(Position position, Token token) {
         Token[][] originalGrid = this.gameBoard.getGameGrid();
 
         Token[][] grid = new Token[Constants.GAMEGRID_ROWS][Constants.GAMEGRID_COLUMNS];
@@ -471,11 +472,11 @@ public class Game {
 
     //-------------------------------Calculation Removes Token Moves--------------------------------
 
-    private Set<TokenMove> createPossibleRemoverTokenMoves(Player player) {
+    public Set<TokenMove> createPossibleRemoverTokenMoves(Player player) {
         Set<TokenMove> tokenMoves = new HashSet<>();
         Set<Position> occupiedFields = occupiedFields();
         for (Position position : occupiedFields) {
-            Calculation currentCalculation = calculateChangeWithMove(player, position, Token.None);
+            Calculation currentCalculation = calculateChangeWithMove(player, position, Token.None, getGridCopyWithAddedToken(position, Token.None));
             //TODO Prevent Loss
             tokenMoves.add(new TokenMove(position, currentCalculation.getPointsChange(), Token.Remover, false, isMovePreventingLoss()));
 
@@ -484,7 +485,7 @@ public class Game {
     }
 
 
-    private Set<Position> occupiedFields() {
+    public Set<Position> occupiedFields() {
         Set<Position> positions = new HashSet<>();
         Token[][] grid = this.gameBoard.getGameGrid();
         for (int i = 0; i < grid.length; i++) {
@@ -497,9 +498,50 @@ public class Game {
         return positions;
     }
 
-    private Set<TokenMove> createPossibleMoverTokenMoves() {
-        return null;
+    //-----------------------------------Calculation Mover Token Moves------------------------------
+
+    public Set<TokenMove> createPossibleMoverTokenMoves(Player player) {
+        Set<TokenMove> tokenMoves = new HashSet<>();
+        Set<Position> emptyFields = emptyFields();
+        Set<Position> occupiedFields = occupiedFields();
+        for (Position occupiedPosition : occupiedFields) {
+            for (Position emptyPosition : emptyFields) {
+                Calculation currentCalculation = calculateChangeWithMove(player, emptyPosition,
+                        getTokenAtPosition(occupiedPosition), getGridCopyWithAddedAndRemovedToken(emptyPosition, getTokenAtPosition(occupiedPosition), occupiedPosition));
+                //TODO Prevent Loss
+                tokenMoves.add(
+                        new TokenMove(emptyPosition, occupiedPosition, currentCalculation.getPointsChange(), Token.Mover,
+                                currentCalculation.isGameWinning(), isMovePreventingLoss()));
+            }
+        }
+        return tokenMoves;
     }
+
+    public Token getTokenAtPosition(Position position) {
+        Token[][] originalGrid = this.gameBoard.getGameGrid();
+        return originalGrid[position.getXCoordinate()][position.getYCoordinate()];
+    }
+
+    private Token[][] getGridCopyWithAddedAndRemovedToken(Position addPosition, Token addToken, Position removePosition) {
+        Token[][] originalGrid = this.gameBoard.getGameGrid();
+
+        Token[][] grid = new Token[Constants.GAMEGRID_ROWS][Constants.GAMEGRID_COLUMNS];
+        for (int i = 0; i < Constants.GAMEGRID_ROWS; i++) {
+            for (int j = 0; j < Constants.GAMEGRID_COLUMNS; j++) {
+                grid[i][j] = originalGrid[i][j];
+            }
+        }
+        grid[addPosition.getXCoordinate()][addPosition.getYCoordinate()] = addToken;
+        grid[removePosition.getXCoordinate()][removePosition.getYCoordinate()] = Token.None;
+
+        return grid;
+    }
+
+
+
+
+
+    //-------------------------------Calculation Swapper Token Moves--------------------------------
 
     private Set<TokenMove> createPossibleSwapperTokenMoves() {
         return null;
