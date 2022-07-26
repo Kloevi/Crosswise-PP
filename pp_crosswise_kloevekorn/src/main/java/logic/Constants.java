@@ -16,7 +16,11 @@ public class Constants {
 
     public static final int PLAYER_NUMBER = 4;
 
+    public static final float LOW_SPEED = 2.0f;
 
+    public static final float MED_SPEED = 1.0f;
 
+    public static final float FAST_SPEED = 0.5f;
 
+    public static final int ANIMATION_DURATION = 1000;
 }

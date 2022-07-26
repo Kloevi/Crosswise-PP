@@ -29,8 +29,8 @@ public class Crosswise extends Application {
         //controller.initialize(null, null);
 
 
-        Integer v = 1280;
-        Integer v1 = 1024;
+        int v = 1280;
+        int v1 = 1024;
 
         Scene scene = new Scene(fxmlLoader.load(), v, v1);
         stage.setTitle("Hello!");

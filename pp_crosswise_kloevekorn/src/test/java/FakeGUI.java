@@ -3,12 +3,16 @@ import logic.Token;
 
 public class FakeGUI implements GUIConnector {
 
-    private Integer a;
-    public FakeGUI(Integer a) {
-        this.a = a;
+    public FakeGUI() {
     }
     @Override
     public void showPlayerHand(int ID, Token[] hand) {
+    }
+    @Override
+    public void hidePlayerHand(int ID){
+    }
+    @Override
+    public void setAnimationSpeed(float speed){
     }
 
 }

@@ -19,25 +19,30 @@ public class Player {
     /**
      * Konstruktor für Default Player
      */
-    public Player(int ID, String name, boolean isActive, boolean isAI, boolean isVerticalTeam) {
+    public Player(int ID, String name, boolean isActive, boolean isAI) {
         this.ID = ID;
         this.name = name;
         this.isActive = isActive;
         this.isAI = isAI;
-        this.isVerticalTeam = isVerticalTeam;
+        isVerticalTeam = ID % 2 == 0;
     }
 
     /**
      * Konstruktor für bereits existierenden Player
      */
-    public Player(int ID, String name, boolean isActive, boolean isAI, boolean isVerticalTeam, int[] hand) {
-        this(ID, name, isActive, isAI, isVerticalTeam);
-        System.arraycopy(hand, 0, this.hand, 0, Constants.HAND_SIZE);
-        Integer a = getID();
+    public Player(int ID, String name, boolean isActive, boolean isAI, int[] hand) {
+        this(ID, name, isActive, isAI);
+        for (int i = 0; i < hand.length; i++) {
+            this.hand[i] = Token.getTokenFromValue(hand[i]);
+        }
     }
 
     public int getID() {
         return ID;
+    }
+
+    public boolean isActive() {
+        return isActive;
     }
 
     public Token[] getHand() {

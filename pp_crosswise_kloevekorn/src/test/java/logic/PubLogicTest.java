@@ -21,22 +21,16 @@ public class PubLogicTest {
 
     }
 
-    @Test
-    public void generateGameLogic() {
-        GameLogic logic = new GameLogic();
-        System.out.println(logic.getDrawPile());
-        System.err.println("----");
-        System.out.println(logic.getHand());
-    }
+
 
     @Test
     public void generateGameTest() throws CrosswiseExceptionHandler {
 
         Player[] players = new Player[Constants.PLAYER_NUMBER];
-        players[0] = new Player(0 ,"Tom", true, false, true);
-        players[1] = new Player(1, "Jacob", true, false, false);
-        players[2] = new Player(2, "Jonas", true, false, true);
-        players[3]= new Player(3, "Simon", true, false, false);
+        players[0] = new Player(0 ,"Tom", true, false);
+        players[1] = new Player(1, "Jacob", true, false);
+        players[2] = new Player(2, "Jonas", true, false);
+        players[3]= new Player(3, "Simon", true, false);
 
         Game game = new Game(players);
 
@@ -55,6 +49,11 @@ public class PubLogicTest {
         //System.out.println(pointsMap);
         System.out.println("---");
 
+        System.out.println("------------------");
+        System.out.println(game.nextPlayer().getID());
+        System.out.println("------------------");
+
+
 
         /*
         Position pos2 = new Position(0, 3);
@@ -62,7 +61,7 @@ public class PubLogicTest {
         System.out.println(calc.getPointsChange());
         */
 
-
+        /*
         Set<TokenMove> tokenMoves = game.createPossibleSymbolTokenMoves(Token.Sun, players[0]);
         for (TokenMove tokenMove : tokenMoves) {
             System.out.println("----");
@@ -71,7 +70,7 @@ public class PubLogicTest {
             System.out.println(tokenMove.getRelativeChange());
             System.out.println(tokenMove.getToken());
         }
-
+        */
 
         /*
         Set<TokenMove> tokenMoves = game.createPossibleRemoverTokenMoves(players[0]);
@@ -120,8 +119,8 @@ public class PubLogicTest {
         */
 
 
-        /*
-        players[0].setHand(new Token[] {Token.Replacer, Token.Pentagon, Token.Square, Token.Square});
+
+        players[0].setHand(new Token[] {Token.Replacer, Token.Sun, Token.Star, Token.Pentagon});
         TokenMove tokenMove = game.calculateAIMove(players[0]);
         System.out.println(tokenMove.getToken());
         System.out.println(tokenMove.getSecondaryMovePosition().getXCoordinate() + "/" +
@@ -132,9 +131,9 @@ public class PubLogicTest {
         System.out.println(tokenMove.getPrimaryMovePosition().getXCoordinate() + "/" +
                 tokenMove.getPrimaryMovePosition().getYCoordinate());
         System.out.println(tokenMove.getRelativeChange());
-        */
 
-        System.out.println(game.getOccurrencesOfTokens());
+
+        //System.out.println(game.getOccurrencesOfTokens());
 
         /*
         TokenMove pentagon = new TokenMove(new Position(3, 1), 1, Token.Pentagon,

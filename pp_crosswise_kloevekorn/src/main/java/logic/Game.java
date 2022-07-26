@@ -15,7 +15,6 @@ import java.util.Set;
 public class Game {
 
 
-
     private GameBoard gameBoard;
 
     private final Player[] players;
@@ -28,17 +27,29 @@ public class Game {
 
     private GUIConnector gui;
 
-    public Game (Player[] players /*GUIConnector gui*/) {
-        //this.gui = gui;
+    public Game (Player[] players) {
+        //TODO player generation;
+
         this.gameBoard = new GameBoard(Constants.GAMEGRID_ROWS);
         this.players = players;
         this.currentPlayer = this.players[0];
         this.usedActionTiles = new int[Constants.UNIQUE_ACTION_TOKENS];
-        generateDrawPile();
+        generateNewDrawPile();
         generateNewHands();
         System.out.println(drawPile);
-
     }
+
+    public Game (GameBoard gameBoard, Player[] players, Player currentPlayer, int[] usedActionTiles) {
+        this.gameBoard = gameBoard;
+        this.players = players;
+        this.currentPlayer = currentPlayer;
+        this.usedActionTiles = usedActionTiles;
+        generateDrawPileForExistingGame();
+    }
+
+    //------------------------------------Getter und Setter-----------------------------------------
+
+
 
     public GameBoard getGameBoard() {
         return gameBoard;
@@ -47,19 +58,52 @@ public class Game {
         this.gameBoard = gameBoard;
     }
 
+    public Player[] getPlayers() {
+        return players;
+    }
+
+    public Player getCurrentPlayer() {
+        return currentPlayer;
+    }
+
+    public int[] getUsedActionTiles() {
+        return usedActionTiles;
+    }
+
+    //-----------------------------------------Methoden---------------------------------------------
 
 
-    public void setUpNewGame() {
-        return;
+    public Player nextPlayer() {
+        int nextId = currentPlayer.getID() + 1;
+        boolean isActivePlayer = false;
+        while (!isActivePlayer) {
+            nextId = nextId % Constants.PLAYER_NUMBER;
+            if (players[nextId].isActive()) {
+                isActivePlayer = true;
+            } else {
+                nextId++;
+            }
+        }
+        return players[nextId];
+    }
+
+    public void computeTurn() throws CrosswiseExceptionHandler {
+
+
+        hideCurrentPlayerHand();
+        this.currentPlayer = nextPlayer();
+        showCurrentPlayerHand();
     }
 
 
-
-    public void showPlayerHand(Player currentPlayer) {
-        gui.showPlayerHand(currentPlayer.getID(), currentPlayer.getHand());
+    public void showCurrentPlayerHand() throws CrosswiseExceptionHandler {
+        gui.showPlayerHand(this.currentPlayer.getID(), this.currentPlayer.getHand());
     }
 
+    public void hideCurrentPlayerHand() {
+        gui.hidePlayerHand(this.currentPlayer.getID());
 
+    }
 
     public void generateNewHands() {
         for (Player player:this.players) {
@@ -99,16 +143,26 @@ public class Game {
         return null;
     }
 
-    public void generateDrawPile() {
-        Token a = Token.Sun;
+    public void generateNewDrawPile() {
         int counter = 1;
         for (int i = 1; i < Constants.UNIQUE_SYMBOL_TOKENS;i++) {
-            this.drawPile.put(a.getTokenFromValue(i), Constants.GAMEGRID_ROWS + 1);
+            this.drawPile.put(Token.getTokenFromValue(i), Constants.GAMEGRID_ROWS + 1);
             counter++;
         }
         for (int j = counter; j <= Constants.UNIQUE_ACTION_TOKENS + counter; j++) {
-            this.drawPile.put(a.getTokenFromValue(j), Constants.AMOUNT_ACTION_TOKENS);
+            this.drawPile.put(Token.getTokenFromValue(j), Constants.AMOUNT_ACTION_TOKENS);
         }
+    }
+
+    public void generateDrawPileForExistingGame() {
+        generateNewDrawPile();
+        Map<Integer, Map<Token, Integer>> occurrenceMap = getOccurrencesOfTokens();
+        for (Map.Entry<Integer, Map<Token, Integer>> entry : occurrenceMap.entrySet()) {
+            for (Map.Entry<Token, Integer> entry1 : entry.getValue().entrySet()) {
+                this.drawPile.put(entry1.getKey(), this.drawPile.get(entry1.getKey()) - 1);
+            }
+        }
+        //TODO auf Funktionalität überprüfen
     }
 
 
@@ -483,8 +537,8 @@ public class Game {
         return swap;
     }
 
-    private boolean isMovePreventingLoss(Player player, Position position, Token token) {
-        Map<Integer, Map<Token, Integer>> occurrenceMap = getOccurrencesOfTokens();
+    private boolean isMovePreventingLoss(/*Player player, Position position, Token token*/) {
+        /*Map<Integer, Map<Token, Integer>> occurrenceMap = getOccurrencesOfTokens();
         for (Map.Entry<Integer, Map<Token, Integer>> entry : occurrenceMap.entrySet()) {
             if (entry.getValue().size() == 1) {
                 for (Map.Entry<Token, Integer> entry2 : entry.getValue().entrySet()) {
@@ -497,6 +551,8 @@ public class Game {
         }
         //TODO Method change
         System.out.println("yay");
+
+         */
         return false;
     }
 

@@ -4,15 +4,23 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.RadioMenuItem;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import logic.Constants;
 import logic.GUIConnector;
-import logic.Game;
+import logic.GameLogic;
 import logic.Player;
 import logic.Token;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.ResourceBundle;
@@ -24,43 +32,50 @@ import java.util.ResourceBundle;
  */
 public class UserInterfaceController implements Initializable {
 
-
     @FXML
     private GridPane gameFieldGrid;
-
     @FXML
     private GridPane handPlayer1;
-
     @FXML
     private GridPane handPlayer2;
-
     @FXML
     private GridPane handPlayer3;
-
     @FXML
     private GridPane handPlayer4;
-
     @FXML
     private Label currentPlayerLabel;
-
     @FXML
-    private GridPane usedActionTokensGrid;
-
+    private VBox usedActionTokensGrid;
     @FXML
     private MenuItem menuPunkte;
-
     @FXML
     private MenuItem menuComputer;
-
-
+    @FXML
+    private RadioMenuItem lowAnimationSpeed;
+    @FXML
+    private RadioMenuItem mediumAnimationSpeed;
+    @FXML
+    private RadioMenuItem fastAnimationSpeed;
 
 
     private GUIConnector guiConnector;
 
+    private GameLogic gameLogic;
+
+
+
+
     @FXML
-    private GridPane player1Hand;
+    private GridPane grdPn;
+
     @FXML
-    private ImageView player1HandToken1;
+    private VBox vBoxWrappingGrdPn;
+
+    @FXML
+    private HBox hBoxWrappingVBox;
+
+
+
 
     /**
      * This is where you need to add code that should happen during
@@ -80,9 +95,12 @@ public class UserInterfaceController implements Initializable {
                 usedActionTokensGrid,
                 menuPunkte,
                 menuComputer);
+        this.gameLogic = new GameLogic(this.guiConnector);
 
+        grdPn.prefWidthProperty().bind(vBoxWrappingGrdPn.widthProperty());
+        grdPn.prefHeightProperty().bind(vBoxWrappingGrdPn.widthProperty());
 
-        //this.gameLogic = new GameLogic(this.guiConnector);
+        vBoxWrappingGrdPn.prefWidthProperty().bind(hBoxWrappingVBox.heightProperty());
 
     }
 
@@ -91,18 +109,117 @@ public class UserInterfaceController implements Initializable {
     protected void clickNewGameButton() {
         //TODO extra Fenster mit Werten
         Player[] players = new Player[Constants.PLAYER_NUMBER];
-        players[0] = new Player(0, "Tom", true, false, true);
-        players[1] = new Player(1,"Jacob", true, false, false);
-        players[2] = new Player(2,"Jonas", true, false, true);
-        players[3]= new Player(3,"Simon", true, false, false);
+        players[0] = new Player(0, "Tom", true, false);
+        players[1] = new Player(1,"Jacob", true, false);
+        players[2] = new Player(2,"Jonas", true, false);
+        players[3]= new Player(3,"Simon", true, false);
 
-        Game game = new Game(players /*TODO guiConnector*/);
-        game.setUpNewGame();
+        gameLogic.setupNewGame(players);
 
         System.out.println(Arrays.toString(players[0].getHand()));
         Image image = new Image(Token.getImagePathFromToken(players[0].getHand()[0]));
 
-        player1HandToken1.setImage(image);
+    }
+
+    private void changeAnimationSpeed(int speedLevel) {
+        switch (speedLevel) {
+            case 0 -> {
+                this.mediumAnimationSpeed.setSelected(false);
+                this.fastAnimationSpeed.setSelected(false);
+                this.guiConnector.setAnimationSpeed(Constants.LOW_SPEED);
+            }
+            case 1 -> {
+                this.lowAnimationSpeed.setSelected(false);
+                this.fastAnimationSpeed.setSelected(false);
+                this.guiConnector.setAnimationSpeed(Constants.MED_SPEED);
+            }
+            case 2 -> {
+                this.lowAnimationSpeed.setSelected(false);
+                this.mediumAnimationSpeed.setSelected(false);
+                this.guiConnector.setAnimationSpeed(Constants.FAST_SPEED);
+            }
+        }
+    }
+
+    @FXML
+    private void clickSaveGameButton() {
+        FileChooser fileChooser = new FileChooser();
+
+        fileChooser.getExtensionFilters().addAll
+                (new FileChooser.ExtensionFilter("JSON files", "*.json"));
+
+        File currDir = null;
+        try {
+            currDir = new File(UserInterfaceController.class.getProtectionDomain().
+                    getCodeSource().getLocation().toURI());
+        } catch (URISyntaxException ex) {
+            //Exception handling
+        }
+        if (currDir != null) {
+            fileChooser.setInitialDirectory(currDir.getParentFile());
+        }
+
+        fileChooser.setTitle("Laufendes Spiel speichern");
+
+        File saveFile = fileChooser.showOpenDialog(this.gameFieldGrid.getScene().getWindow());
+        if (saveFile != null) {
+            gameLogic.saveGame(saveFile);
+        } else {
+            //exception handling
+        }
+    }
+
+    @FXML
+    private void clickLoadGameButton() throws FileNotFoundException {
+        FileChooser fileChooser = new FileChooser();
+
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("JSON files", "*.json"));
+
+        File currDir = null;
+        try {
+            currDir = new File(UserInterfaceController.class.getProtectionDomain().
+                    getCodeSource().getLocation().toURI());
+        } catch (URISyntaxException ex) {
+            //Exception handling
+        }
+        if (currDir != null) {
+            fileChooser.setInitialDirectory(currDir.getParentFile());
+        }
+
+        fileChooser.setTitle("Vorhandendes Spiel laden");
+
+        File loadFile = fileChooser.showOpenDialog(this.gameFieldGrid.getScene().getWindow());
+        if (loadFile != null) {
+            gameLogic.loadGame(loadFile);
+        } else {
+            //exception handling
+        }
+    }
+
+    @FXML
+    private void clickEndGameButton() {
+        Stage stage = (Stage) this.gameFieldGrid.getScene().getWindow();
+        stage.close();
+    }
+
+    @FXML
+    private void changeAnimationSpeedLow() {
+        changeAnimationSpeed(0);
+    }
+    @FXML
+    private void changeAnimationSpeedMedium() {
+        changeAnimationSpeed(1);
+    }
+    @FXML
+    private void changeAnimationSpeedFast() {
+        changeAnimationSpeed(2);
+    }
+
+
+    @FXML
+    private void onGrdPnMouseClicked(MouseEvent mouseEvent) {
+        System.out.printf("width/height: %5.1f/%5.1f%n", grdPn.getWidth(), grdPn.getHeight());
     }
 
 
